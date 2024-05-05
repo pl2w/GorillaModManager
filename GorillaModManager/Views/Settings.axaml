@@ -12,7 +12,8 @@
 			<TextBox Name="GorilaPath" Watermark="Gorilla Tag Path" Width="400"></TextBox>
 			<Button Name="PathButton" Click="OnPathButtonClick">...</Button>
 
-			<Button Click="InstallBepInEx">Install BepInEx</Button>
+			<Button Name="InstallButton" Click="BepInExButtons">Install BepInEx</Button>
+			<Button Name="UninstallButton" Click="BepInExButtons">Uninstall BepInEx</Button>
 		</WrapPanel>
 	</Panel>
 </UserControl>

@@ -16,5 +16,10 @@
             DownloadUrl = downloadUrl;
             DownloadCount = downloadCount;
         }
+
+        public ModModel(string downloadUrl)
+        {
+            DownloadUrl = downloadUrl;
+        }
     }
 }
