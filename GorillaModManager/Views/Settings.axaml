@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+			 xmlns:vm="using:GorillaModManager.ViewModels"
+             x:Class="GorillaModManager.Views.Settings"
+			 x:DataType="vm:MainWindowViewModel">
+
+	<Panel VerticalAlignment="Top" HorizontalAlignment="Left">
+		<WrapPanel>
+			<TextBox Name="GorilaPath" Watermark="Gorilla Tag Path" Width="400"></TextBox>
+			<Button Name="PathButton" Click="OnPathButtonClick">...</Button>
+
+			<Button Click="InstallBepInEx">Install BepInEx</Button>
+		</WrapPanel>
+	</Panel>
+</UserControl>

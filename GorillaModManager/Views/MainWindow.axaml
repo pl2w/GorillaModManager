@@ -1,0 +1,90 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:GorillaModManager.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="GorillaModManager.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+		xmlns:views="using:GorillaModManager.Views"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="GorillaModManager"
+		Width="700"
+		Height="450"
+		ExtendClientAreaToDecorationsHint="True"
+		CanResize="False"
+		TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent">
+
+	<Panel>
+		<ExperimentalAcrylicBorder IsHitTestVisible="False">
+			<ExperimentalAcrylicBorder.Material>
+				<ExperimentalAcrylicMaterial
+					BackgroundSource="Digger"
+					TintColor="Black"
+					TintOpacity="1"
+					MaterialOpacity="0.65" />
+			</ExperimentalAcrylicBorder.Material>
+		</ExperimentalAcrylicBorder>
+
+		<Panel Width="200" Background="#1F1F1F" HorizontalAlignment="Left">
+			<TextBlock 
+				Text="Gorilla Mod Manager" 
+				HorizontalAlignment="Center"
+				Margin="0 15"
+				FontSize="16"
+				FontWeight="Bold"/>
+			<TextBlock
+				HorizontalAlignment="Center"
+				Margin="0 40"
+				FontSize="10"
+				Foreground="Gray"
+				Text="by pl2w | discord.gg/monkemod">
+			</TextBlock>
+
+			<Panel Width="200" Height="2"
+				Background="#2e2e2e" VerticalAlignment="Top"
+				Margin="60"/>
+
+			<Button HorizontalAlignment="Right" VerticalAlignment="Top"
+				Background="Transparent"
+				Margin="22 40"
+				Width="110"
+				Command="{Binding OnDiscordClick}">
+				<Button.Styles>
+					<Style Selector="Button">
+						<Setter Property="Background" Value="Transparent" />
+					</Style>
+					<Style Selector="Button:pointerover /template/ ContentPresenter">
+						<Setter Property="Background" Value="Transparent" />
+					</Style>
+					<Style Selector="Button:pressed /template/ ContentPresenter">
+						<Setter Property="Background" Value="Transparent" />
+					</Style>
+				</Button.Styles>
+			</Button>
+		</Panel>
+		
+		<WrapPanel HorizontalAlignment="Left"
+		    VerticalAlignment="Top"
+		    Margin="0 65">
+			<TabControl TabStripPlacement="Left">
+				<TabItem Header="Mod Browser">
+					<UserControl Content="{Binding ModBrowser}"/>
+				</TabItem>
+				<TabItem Header="Installed Mods">
+					<UserControl Content="{Binding ModManager}"/>
+				</TabItem>
+				<TabItem Header="Config Editor">
+					<UserControl Content="{Binding ModConfig}"/>
+				</TabItem>
+				<TabItem Header="Custom Items">
+					<UserControl Content="{Binding CustomItems}"/>
+				</TabItem>
+				<TabItem Header="Options">
+					<UserControl Content="{Binding Settings}"/>
+				</TabItem>
+			</TabControl>
+		</WrapPanel>
+	</Panel>
+</Window>
