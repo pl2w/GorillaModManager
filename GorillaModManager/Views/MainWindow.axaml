@@ -64,27 +64,33 @@
 				</Button.Styles>
 			</Button>
 		</Panel>
-		
-		<WrapPanel HorizontalAlignment="Left"
-		    VerticalAlignment="Top"
-		    Margin="0 65">
+
+		<WrapPanel Margin="0 290" Height="450">
 			<TabControl TabStripPlacement="Left">
 				<TabItem Header="Mod Browser">
-					<UserControl Content="{Binding ModBrowser}"/>
+					<views:ModBrowser/>
 				</TabItem>
 				<TabItem Header="Installed Mods">
-					<UserControl Content="{Binding ModManager}"/>
+					<views:ModManager/>
 				</TabItem>
 				<TabItem Header="Config Editor">
-					<UserControl Content="{Binding ModConfig}"/>
+					<views:ModConfig/>
 				</TabItem>
 				<TabItem Header="Custom Items">
-					<UserControl Content="{Binding CustomItems}"/>
+					<views:CustomItems/>
 				</TabItem>
 				<TabItem Header="Options">
-					<UserControl Content="{Binding Settings}"/>
+					<views:Settings/>
 				</TabItem>
 			</TabControl>
 		</WrapPanel>
+		
+		<TextBlock
+			VerticalAlignment="Bottom" 
+			Margin="5" 
+			Foreground="#444444" 
+			FontWeight="Bold"
+			FontSize="10"
+			Text="{Binding ManagerVersion}"/>
 	</Panel>
 </Window>

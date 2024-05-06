@@ -1,4 +1,5 @@
-﻿using GorillaModManager.Views;
+﻿using GorillaModManager.Models;
+using GorillaModManager.Views;
 using System.Diagnostics;
 
 namespace GorillaModManager.ViewModels
@@ -10,6 +11,8 @@ namespace GorillaModManager.ViewModels
         public ModConfig ModConfig { get; } = new ModConfig();
         public CustomItems CustomItems { get; } = new CustomItems();
         public Settings Settings { get; } = new Settings();
+
+        public string ManagerVersion { get; } = GlobalSettings.Version;
 
         public void OnDiscordClick()
         {

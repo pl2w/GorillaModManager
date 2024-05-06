@@ -4,6 +4,7 @@ using Avalonia.Platform.Storage;
 using GorillaModManager.Models;
 using GorillaModManager.Services;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace GorillaModManager.Views
@@ -31,6 +32,9 @@ namespace GorillaModManager.Views
                 AllowMultiple = false,
                 FileTypeFilter = [GorillaTagFile]
             });
+
+            if(gtagPath.Count <= 0)
+                return;
 
             GlobalSettings.GorillaPath = Path.GetDirectoryName(gtagPath[0].Path.LocalPath);
             GorilaPath.Text = GlobalSettings.GorillaPath;
@@ -61,14 +65,7 @@ namespace GorillaModManager.Views
                 return;
             }
 
-            if (Environment.Is64BitOperatingSystem)
-            {
-                await InstallationHandler.InstallFile(new ModModel("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23/BepInEx_win_x64_5.4.23.0.zip"), GlobalSettings.GorillaPath);
-            }
-            else
-            {
-                await InstallationHandler.InstallFile(new ModModel("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23/BepInEx_win_x86_5.4.23.0.zip"), GlobalSettings.GorillaPath);
-            }
+            await InstallationHandler.InstallFile(new ModModel("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23/BepInEx_win_x64_5.4.23.0.zip"), GlobalSettings.GorillaPath);
         }
     }
 }
