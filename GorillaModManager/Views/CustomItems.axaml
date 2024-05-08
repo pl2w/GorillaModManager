@@ -4,11 +4,4 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
              x:Class="GorillaModManager.Views.CustomItems">
-
-	<Panel>
-		<Panel HorizontalAlignment="Right" VerticalAlignment="Top">
-			<Button Click="RegisterButton">Register Folder</Button>
-			
-		</Panel>
-	</Panel>
 </UserControl>

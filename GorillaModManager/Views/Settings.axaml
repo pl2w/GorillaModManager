@@ -7,13 +7,20 @@
              x:Class="GorillaModManager.Views.Settings"
 			 x:DataType="vm:MainWindowViewModel">
 
-	<Panel VerticalAlignment="Top" HorizontalAlignment="Left">
-		<WrapPanel>
-			<TextBox Name="GorilaPath" Watermark="Gorilla Tag Path" Width="400"></TextBox>
-			<Button Name="PathButton" Click="OnPathButtonClick">...</Button>
-
-			<Button Name="InstallButton" Click="BepInExButtons">Install BepInEx</Button>
-			<Button Name="UninstallButton" Click="BepInExButtons">Uninstall BepInEx</Button>
-		</WrapPanel>
+	<Panel VerticalAlignment="Top" HorizontalAlignment="Left" Width="475">
+		<Border Background="#2E2E2E"
+				BorderBrush="#1F1F1F"
+				BorderThickness="5"
+				CornerRadius="5"
+				Margin="0 2">
+			<WrapPanel>
+				<TextBlock Margin="7 5" Text="BepInEx" FontSize="18"/>
+				<TextBox Margin="5" Name="GorilaPath" Watermark="Gorilla Tag Path" Width="400"/>
+				<Button Margin="5" Name="PathButton" Click="OnPathButtonClick">...</Button>
+				<Button Margin="5" Name="InstallButton" Click="BepInExButtons">Install BepInEx</Button>
+				<Button Margin="5" Name="UninstallButton" Click="BepInExButtons">Uninstall BepInEx</Button>
+				<Button Margin="5" Name="ToggleBepInEx" Click="BepInExButtons">Disable BepInEx</Button>
+			</WrapPanel>
+		</Border>
 	</Panel>
 </UserControl>

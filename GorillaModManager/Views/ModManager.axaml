@@ -5,10 +5,72 @@
              mc:Ignorable="d"
              x:Class="GorillaModManager.Views.ModManager"
 			 xmlns:vm="using:GorillaModManager.ViewModels"
-			 Width="525"
-			 Height="450">
+			 x:DataType="vm:ModManagerViewModel"
+			 Width="500"
+			 Height="400">
 
-	<Panel VerticalAlignment="Center" Background="White" Width="450" Height="400">
+	<Panel>
+		<Panel>
+			<Border Background="#2E2E2E"
+				BorderBrush="#1F1F1F"
+				BorderThickness="5"
+				CornerRadius="5"
+				Margin="0 2"
+				Height="50"
+				Width="480"
+				VerticalAlignment="Top">
+				<WrapPanel VerticalAlignment="Center">
+					<Button Command="{Binding RefreshModList}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Content="Refresh"
+						Margin="5 5"/>
+					<Button Command="{Binding ToggleMods}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Content="Toggle All"
+						Margin="0 5"/>
+					<TextBox Width="297" 
+							 Height="20"
+							 Watermark="Search..."
+							 Margin="5 0"
+							 Name="SearchBar"
+							 Text="{Binding SearchText}"/>
+				</WrapPanel>
+			</Border>
+		</Panel>
 		
+		<ScrollViewer VerticalScrollBarVisibility="Visible"
+			Width="480"
+			Height="320"
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Center"
+			Margin="0 25">
+			<ItemsControl ItemsSource="{Binding InstalledMods}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Border Background="#2E2E2E"
+							BorderBrush="#1F1F1F"
+							BorderThickness="5"
+							CornerRadius="5"
+							Margin="0 2">
+							<Panel Height="30" Margin="10">
+								<TextBlock VerticalAlignment="Top" Text="{Binding Name}" Margin="5 -2.5"/>
+								<TextBlock VerticalAlignment="Bottom" Margin="5 -2.5">
+									<Run Foreground="Gray" Text="{Binding Author}"/>
+									<Run Foreground="Gray" Text=" | "/>
+									<Run Foreground="Gray" Text="{Binding Version}"/>
+								</TextBlock>
+								<CheckBox Name="{Binding Name}" 
+										  IsChecked="{Binding Enabled}" 
+										  Margin="0 0" 
+										  HorizontalAlignment="Right"
+										  Command="{Binding Toggle}"/>
+							</Panel>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
 	</Panel>
 </UserControl>

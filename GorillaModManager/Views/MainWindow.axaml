@@ -7,7 +7,7 @@
         x:Class="GorillaModManager.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
 		xmlns:views="using:GorillaModManager.Views"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/icon.ico"
         Title="GorillaModManager"
 		Width="700"
 		Height="450"
@@ -71,7 +71,7 @@
 					<views:ModBrowser/>
 				</TabItem>
 				<TabItem Header="Installed Mods">
-					<views:ModManager/>
+					<views:ModManager DataContext="{Binding ModManager}"/>
 				</TabItem>
 				<TabItem Header="Config Editor">
 					<views:ModConfig/>
@@ -79,7 +79,7 @@
 				<TabItem Header="Custom Items">
 					<views:CustomItems/>
 				</TabItem>
-				<TabItem Header="Options">
+				<TabItem Header="Miscellaneous">
 					<views:Settings/>
 				</TabItem>
 			</TabControl>

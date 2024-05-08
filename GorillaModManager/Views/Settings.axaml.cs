@@ -3,8 +3,6 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using GorillaModManager.Models;
 using GorillaModManager.Services;
-using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace GorillaModManager.Views
@@ -15,8 +13,8 @@ namespace GorillaModManager.Views
         {
             InitializeComponent();
             GorilaPath.IsReadOnly = true;
-            InstallButton.IsEnabled = false;
-            UninstallButton.IsEnabled = false;
+
+            ToggleButtons(false, false, false);
         }
 
         public static FilePickerFileType GorillaTagFile { get; } = new("Gorilla Tag")
@@ -38,34 +36,78 @@ namespace GorillaModManager.Views
 
             GlobalSettings.GorillaPath = Path.GetDirectoryName(gtagPath[0].Path.LocalPath);
             GorilaPath.Text = GlobalSettings.GorillaPath;
-            InstallButton.IsEnabled = true;
+            ToggleButtons(true, false, false);
 
             if (File.Exists(Path.Combine(GlobalSettings.GorillaPath, "winhttp.dll")))
-                UninstallButton.IsEnabled = true;
-        }
+            {
+                ToggleBepInEx.Content = "Disable BepInEx";
+                ToggleButtons(true, true, true);
+            } else if (File.Exists(Path.Combine(GlobalSettings.GorillaPath, "winhttp.disabled")))
+            {
+                ToggleBepInEx.Content = "Enable BepInEx";
+                ToggleButtons(true, true, true);
+            }
+        } 
 
         public async void BepInExButtons(object sender, RoutedEventArgs args)
         {
             if (GlobalSettings.GorillaPath == string.Empty)
             {
-                InstallButton.IsEnabled = false;
-                UninstallButton.IsEnabled = false;
+                ToggleButtons(false, false, false);
                 return;
             }
 
             Button? btn = sender as Button;
-
-            if(btn?.Name == "UninstallButton")
+            switch (btn?.Name)
             {
-                File.Delete(Path.Combine(GlobalSettings.GorillaPath, "winhttp.dll"));
-                File.Delete(Path.Combine(GlobalSettings.GorillaPath, "changelog.txt"));
-                File.Delete(Path.Combine(GlobalSettings.GorillaPath, ".doorstop_version"));
-                File.Delete(Path.Combine(GlobalSettings.GorillaPath, "doorstop_config.ini"));
-                Directory.Delete(Path.Combine(GlobalSettings.GorillaPath, "BepInEx"), true);
-                return;
+                case "UninstallButton":
+                    File.Delete(Path.Combine(GlobalSettings.GorillaPath, "winhttp.dll"));
+                    File.Delete(Path.Combine(GlobalSettings.GorillaPath, "changelog.txt"));
+                    File.Delete(Path.Combine(GlobalSettings.GorillaPath, ".doorstop_version"));
+                    File.Delete(Path.Combine(GlobalSettings.GorillaPath, "doorstop_config.ini"));
+                    Directory.Delete(Path.Combine(GlobalSettings.GorillaPath, "BepInEx"), true);
+                    return;
+                case "ToggleBepInEx":
+                    string winDll = Path.Combine(GlobalSettings.GorillaPath, "winhttp.dll");
+                    string winDisabled = Path.Combine(GlobalSettings.GorillaPath, "winhttp.disabled");
+
+                    if (File.Exists(winDll))
+                    {
+                        if (File.Exists(winDisabled))
+                            File.Delete(winDisabled);
+
+                        File.Move(winDll, Path.Combine(GlobalSettings.GorillaPath, "winhttp.disabled"));
+                        ToggleBepInEx.Content = "Enable BepInEx";
+                    }
+                    else if(File.Exists(winDisabled))
+                    {
+                        if (File.Exists(winDll))
+                            File.Delete(winDll);
+
+                        File.Move(winDisabled, Path.Combine(GlobalSettings.GorillaPath, "winhttp.dll"));
+                        ToggleBepInEx.Content = "Disable BepInEx";
+                    }
+                    else
+                    {
+                        ToggleButtons(true, false, false);
+                    }
+                    return;
+                case "InstallButton":
+                    await InstallationHandler.InstallFile(
+                        new ModModel("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23/BepInEx_win_x64_5.4.23.0.zip"), 
+                        GlobalSettings.GorillaPath
+                    );
+                    break;
             }
 
-            await InstallationHandler.InstallFile(new ModModel("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23/BepInEx_win_x64_5.4.23.0.zip"), GlobalSettings.GorillaPath);
+            ToggleButtons(true, true, true);
+        }
+
+        public void ToggleButtons(bool install, bool uninstall, bool toggle)
+        {
+            InstallButton.IsEnabled = install;
+            UninstallButton.IsEnabled = uninstall;
+            ToggleBepInEx.IsEnabled = toggle;
         }
     }
 }

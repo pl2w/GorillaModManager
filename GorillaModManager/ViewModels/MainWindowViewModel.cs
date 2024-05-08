@@ -1,4 +1,6 @@
-﻿using GorillaModManager.Models;
+﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
+using GorillaModManager.Models;
 using GorillaModManager.Views;
 using System.Diagnostics;
 
@@ -6,13 +8,14 @@ namespace GorillaModManager.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ModBrowser ModBrowser { get; } = new ModBrowser();
-        public ModManager ModManager { get; } = new ModManager();
-        public ModConfig ModConfig { get; } = new ModConfig();
-        public CustomItems CustomItems { get; } = new CustomItems();
-        public Settings Settings { get; } = new Settings();
-
         public string ManagerVersion { get; } = GlobalSettings.Version;
+
+        public static ModManagerViewModel ModManager { get; set; }
+
+        public MainWindowViewModel()
+        {
+            ModManager = new ModManagerViewModel();
+        }
 
         public void OnDiscordClick()
         {

@@ -18,5 +18,10 @@ namespace GorillaModManager.Models
         {
             return Path.Combine(GorillaPath, "BepInEx", "Plugins");
         }
+
+        public static bool DoesPluginsExist()
+        {
+            return Path.Exists(GetPluginsPath());
+        }
     }
 }

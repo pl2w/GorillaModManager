@@ -4,8 +4,4 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
              x:Class="GorillaModManager.Views.ModConfig">
-
-	<Panel VerticalAlignment="Top">
-		<Button>Test</Button>
-	</Panel>
 </UserControl>
