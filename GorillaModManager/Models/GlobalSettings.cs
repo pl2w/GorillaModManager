@@ -6,7 +6,7 @@ namespace GorillaModManager.Models
     {
         public static string GorillaPath { get; set; } = string.Empty;
 
-        private static string _version = "v1.0.0";
+        private static string _version = "v0.0.1";
 
 #if DEBUG
         public static string Version { get; } = $"{_version} - DEBUG";

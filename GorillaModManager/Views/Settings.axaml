@@ -7,7 +7,7 @@
              x:Class="GorillaModManager.Views.Settings"
 			 x:DataType="vm:MainWindowViewModel">
 
-	<Panel VerticalAlignment="Top" HorizontalAlignment="Left" Width="475">
+	<StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Width="475">
 		<Border Background="#2E2E2E"
 				BorderBrush="#1F1F1F"
 				BorderThickness="5"
@@ -22,5 +22,5 @@
 				<Button Margin="5" Name="ToggleBepInEx" Click="BepInExButtons">Disable BepInEx</Button>
 			</WrapPanel>
 		</Border>
-	</Panel>
+	</StackPanel>
 </UserControl>

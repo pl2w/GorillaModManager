@@ -39,13 +39,20 @@ namespace GorillaModManager.Models
 
         public void Toggle()
         {
-            if(File.Exists(Path + ".dll"))
+            try
             {
-                File.Move(Path + ".dll", Path + ".disabled");
+                if (File.Exists(Path + ".dll"))
+                {
+                    File.Move(Path + ".dll", Path + ".disabled");
+                }
+                else if (File.Exists(Path + ".disabled"))
+                {
+                    File.Move(Path + ".disabled", Path + ".dll");
+                }
             }
-            else if (File.Exists(Path + ".disabled"))
+            catch (Exception)
             {
-                File.Move(Path + ".disabled", Path + ".dll");
+
             }
         }
     }
