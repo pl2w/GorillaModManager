@@ -10,14 +10,14 @@
 			 Height="400">
 
 	<Panel>
-		<Panel>
+		<Panel>			
 			<Border Background="#2E2E2E"
 				BorderBrush="#1F1F1F"
 				BorderThickness="5"
 				CornerRadius="5"
 				Margin="0 2"
 				Height="50"
-				Width="480"
+				Width="475"
 				VerticalAlignment="Top">
 				<WrapPanel VerticalAlignment="Center">
 					<Button Command="{Binding RefreshModList}"
@@ -30,7 +30,7 @@
 						VerticalAlignment="Top"
 						Content="Toggle All"
 						Margin="0 5"/>
-					<TextBox Width="297" 
+					<TextBox Width="290" 
 							 Height="20"
 							 Watermark="Search..."
 							 Margin="5 0"
@@ -41,7 +41,7 @@
 		</Panel>
 		
 		<ScrollViewer VerticalScrollBarVisibility="Visible"
-			Width="480"
+			Width="475"
 			Height="320"
 			VerticalAlignment="Bottom"
 			HorizontalAlignment="Center"
@@ -55,13 +55,13 @@
 							CornerRadius="5"
 							Margin="0 2">
 							<Panel Height="30" Margin="10">
-								<TextBlock VerticalAlignment="Top" Text="{Binding Name}" Margin="5 -2.5"/>
+								<TextBlock VerticalAlignment="Top" Text="{Binding ModName}" Margin="5 -2.5"/>
 								<TextBlock VerticalAlignment="Bottom" Margin="5 -2.5">
-									<Run Foreground="Gray" Text="{Binding Author}"/>
+									<Run Foreground="Gray" Text="{Binding ModGuid}"/>
 									<Run Foreground="Gray" Text=" | "/>
-									<Run Foreground="Gray" Text="{Binding Version}"/>
+									<Run Foreground="Gray" Text="{Binding ModVersion}"/>
 								</TextBlock>
-								<CheckBox Name="{Binding Name}" 
+								<CheckBox Name="{Binding ModName}" 
 										  IsChecked="{Binding Enabled}" 
 										  Margin="0 0" 
 										  HorizontalAlignment="Right"

@@ -2,24 +2,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+             mc:Ignorable="d"
 			 xmlns:vm="using:GorillaModManager.ViewModels"
              x:Class="GorillaModManager.Views.Settings"
-			 x:DataType="vm:MainWindowViewModel">
+			 Width="500"
+			 Height="400">
 
-	<StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Width="475">
+	<StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Width="475">
 		<Border Background="#2E2E2E"
 				BorderBrush="#1F1F1F"
 				BorderThickness="5"
 				CornerRadius="5"
-				Margin="0 2">
+				Margin="0 2"
+				Width="475">
 			<WrapPanel>
 				<TextBlock Margin="7 5" Text="BepInEx" FontSize="18"/>
-				<TextBox Margin="5" Name="GorilaPath" Watermark="Gorilla Tag Path" Width="400"/>
-				<Button Margin="5" Name="PathButton" Click="OnPathButtonClick">...</Button>
-				<Button Margin="5" Name="InstallButton" Click="BepInExButtons">Install BepInEx</Button>
-				<Button Margin="5" Name="UninstallButton" Click="BepInExButtons">Uninstall BepInEx</Button>
-				<Button Margin="5" Name="ToggleBepInEx" Click="BepInExButtons">Disable BepInEx</Button>
+				<TextBox Margin="5" Name="GorilaPath"
+						 Watermark="Gorilla Tag Path" 
+						 Width="415" />
+				<Button Margin="5" Name="PathButton" Click="OnPathClick">...</Button>
+				<Button Margin="5" Click="BepInButtons" Name="InstallButton">Install BepInEx</Button>
+				<Button Margin="5" Click="BepInButtons" Name="UninstallButton">Uninstall BepInEx</Button>
+				<Button Margin="5" Click="BepInButtons" Name="ToggleButton">Disable BepInEx</Button>
+				<Button Margin="5" Click="BepInButtons" Name="BackupMods">Backup BepInEx</Button>
+				<Button Margin="5" Click="BepInButtons" Name="UseBackup">Install Backup</Button>
+			</WrapPanel>
+		</Border>
+
+		<Border Background="#2E2E2E"
+				BorderBrush="#1F1F1F"
+				BorderThickness="5"
+				CornerRadius="5"
+				Margin="0 2"
+				Width="475"
+				Height="80">
+			<WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+				<TextBlock Margin="7 5" Text="Game" FontSize="18"/>
+				<Panel Width="500"/>
+				<Button Margin="5 0" Name="LaunchGame" Click="LaunchGorillaTag">Launch Game</Button>
+				<Button Margin="5 0" Name="GotoGame" Click="GotoGorillaTag">Open Game Directory</Button>					
 			</WrapPanel>
 		</Border>
 	</StackPanel>

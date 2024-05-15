@@ -1,5 +1,6 @@
-﻿using Avalonia.Controls;
-using GorillaModManager.Models;
+﻿using GorillaModManager.Models;
+using GorillaModManager.Models.Mods;
+using GorillaModManager.Models.Persistence;
 using Mono.Cecil;
 using ReactiveUI;
 using System;
@@ -7,15 +8,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reactive.Linq;
-using System.Reflection;
 
 namespace GorillaModManager.ViewModels
 {
     public class ModManagerViewModel : ViewModelBase
     {
-        public List<ModModel> InstalledMods
+        public List<ManagerMod> InstalledMods
         {
             get
             {
@@ -27,7 +26,7 @@ namespace GorillaModManager.ViewModels
             }
         }
 
-        public Dictionary<string, ModInfo> _cachedModInfos = new();
+        public Dictionary<string, ModInfo> _cachedModInfos = [];
 
         public string? SearchText
         {
@@ -35,34 +34,34 @@ namespace GorillaModManager.ViewModels
             set => this.RaiseAndSetIfChanged(ref _searchText, value);
         }
 
-        string _searchText;
-        public bool isAdvanced = false;
-        List<ModModel> _installedMods;
+        string _searchText = string.Empty;
+        List<ManagerMod> _installedMods = [];
 
         public ModManagerViewModel()
         {
             this.WhenAnyValue(x => x.SearchText)
-                .Throttle(TimeSpan.FromMilliseconds(400))
+                .Throttle(TimeSpan.FromMilliseconds(200))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(RefreshModList!);
         }
 
-        public async void RefreshModList(string? search)
+        public void RefreshModList(string? search)
         {
-            if (!GlobalSettings.DoesPluginsExist())
+            if (!DataUtils.DoesPluginsExist())
                 return;
 
-            List<string> mods = Directory.GetFiles(GlobalSettings.GetPluginsPath(), "*.dll", SearchOption.AllDirectories).ToList();
-            mods.AddRange(Directory.GetFiles(GlobalSettings.GetPluginsPath(), "*.disabled", SearchOption.AllDirectories));
+            List<string> mods = [.. Directory.GetFiles(DataUtils.Plugins(), "*.dll", SearchOption.AllDirectories)];
+            mods.AddRange(Directory.GetFiles(DataUtils.Plugins(), "*.disabled", SearchOption.AllDirectories));
             
             InstalledMods = GetValidMods(mods, search);
         }
 
-        private List<ModModel> GetValidMods(List<string> modFiles, string searchTerm)
+        private List<ManagerMod> GetValidMods(List<string> modFiles, string searchTerm)
         {
-            Stopwatch watch = new Stopwatch();
+            Stopwatch watch = new();
             watch.Start();
-            List<ModModel> modModels = new List<ModModel>();
+
+            List<ManagerMod> ManagerMods = [];
             for (int i = 0; i < modFiles.Count; i++)
             {
                 string modSimpleName = Path.GetFileNameWithoutExtension(modFiles[i]);
@@ -100,7 +99,7 @@ namespace GorillaModManager.ViewModels
 
                     if (IsBepInPlugin)
                     {
-                        for (int z = 0; z < pluginType.CustomAttributes.Count; z++)
+                        for (int z = 0; z < pluginType?.CustomAttributes.Count; z++)
                         {
                             if (pluginType.CustomAttributes[z].Constructor.FullName.Contains("BepInEx.BepInPlugin"))
                             {
@@ -120,7 +119,7 @@ namespace GorillaModManager.ViewModels
                     modGuid = cachedInfo.modGuid;
                 }
 
-                ModModel model = new ModModel
+                ManagerMod model = new
                 (
                     modName,
                     modGuid,
@@ -129,7 +128,7 @@ namespace GorillaModManager.ViewModels
                     $"{modPath}/{modSimpleName}"
                 );
 
-                modModels.Add(model);
+                ManagerMods.Add(model);
 
                 if (!_cachedModInfos.ContainsKey($"{modPath}/{modSimpleName}"))
                 {
@@ -141,7 +140,7 @@ namespace GorillaModManager.ViewModels
             watch.Stop();
             Debug.WriteLine($"Took: {watch.Elapsed}");
 
-            return modModels;
+            return ManagerMods;
         }
 
         public void ToggleMods()
@@ -154,12 +153,6 @@ namespace GorillaModManager.ViewModels
                 InstalledMods[i].Toggle();
             }
 
-            RefreshModList(SearchText);
-        }
-
-        public void ToggleAdvanced()
-        {
-            isAdvanced = !isAdvanced;
             RefreshModList(SearchText);
         }
     }

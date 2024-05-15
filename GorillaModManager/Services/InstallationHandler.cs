@@ -1,71 +1,63 @@
-﻿using GorillaModManager.Models;
-using System.Collections.Generic;
+﻿using GorillaModManager.Models.Mods;
+using GorillaModManager.Models.Persistence;
+using MsBox.Avalonia.Enums;
+using MsBox.Avalonia;
+using System;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Net;
-using System.Net.Mime;
+using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace GorillaModManager.Services
 {
     public static class InstallationHandler
     {
-        public static List<ModModel> _queue { get; private set; } = new List<ModModel>();
-        public static bool IsInstalling { get; private set; } = false;
-        
-        public static void AddToQueue(ModModel mod)
-        {
-            _queue.Add(mod);
-        }
+        public const int ZipIdentifier = 0x04034b50;
+        public static List<string> currentlyInstallingMods = new List<string>(); 
 
-        public static void InstallQueue()
-        {
-            if (GlobalSettings.GorillaPath == string.Empty)
-                return;
-
-            StartInstallation();
-        }
-
-        static async void StartInstallation()
-        {
-            if (IsInstalling)
-                return;
-
-            IsInstalling = true;
-            for (int i = 0; i < _queue.Count; i++)
-            {
-                await InstallFile(_queue[i], GlobalSettings.GetPluginsPath());
-            }
-
-            IsInstalling = false;
-            _queue.Clear();
-        }
-
-        public static async Task InstallFile(ModModel mod, string location)
+        public static async Task InstallFileFromUrl(InstallerMod mod, string localPath, bool createFolder)
         {
             try
             {
-                WebClient client = new WebClient();
-                byte[] file = await client.DownloadDataTaskAsync(mod.DownloadUrl);
+                if (currentlyInstallingMods.Contains(mod.DownloadUrl))
+                    return;
 
-                string filename = new ContentDisposition(client.ResponseHeaders["content-disposition"]).FileName;
+                currentlyInstallingMods.Add(mod.DownloadUrl);
 
-                var fileExt = filename.Split('.').Last();
+                string fullPath = Path.Combine(ManagerSettings.Default.GamePath, localPath);
 
-                if (fileExt == "zip")
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("User-Agent", "Gorilla-Mod-Manager");
+
+                byte[] downloadedBytes = await client.GetByteArrayAsync(mod.DownloadUrl);
+
+                string pathForExtract = fullPath;
+                if (createFolder)
                 {
-                    MemoryStream stream = new MemoryStream(file);
-                    ZipFile.ExtractToDirectory(stream, location, true);
+                    pathForExtract = Path.Combine(fullPath, mod.ModName);
+                    Directory.CreateDirectory(pathForExtract);
                 }
-                else
+
+                if (BitConverter.ToInt32(downloadedBytes, 0) == ZipIdentifier)
                 {
-                    await File.WriteAllBytesAsync(Path.Combine(location, filename), file);
+                    ZipFile.ExtractToDirectory(new MemoryStream(downloadedBytes), pathForExtract, true);
+
+                    currentlyInstallingMods.Remove(mod.DownloadUrl);
+                    return;
                 }
+
+                File.WriteAllBytes(pathForExtract + ".dll", downloadedBytes);
+
+                currentlyInstallingMods.Remove(mod.DownloadUrl);
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
+                var box = MessageBoxManager
+                    .GetMessageBoxStandard("Installer Failure.", e.Message,
+                        ButtonEnum.Ok);
 
+                await box.ShowAsync();
             }
         }
     }

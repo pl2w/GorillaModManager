@@ -3,5 +3,121 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="GorillaModManager.Views.ModBrowser">
+             x:Class="GorillaModManager.Views.ModBrowser"
+			 xmlns:vm="using:GorillaModManager.ViewModels"
+			 Width="500"
+			 Height="400"
+			 x:DataType="vm:ModBrowserViewModel"
+			 xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia">
+	<Panel>
+		<Panel>
+			<Border Background="#2E2E2E"
+				BorderBrush="#1F1F1F"
+				BorderThickness="5"
+				CornerRadius="5"
+				Margin="0 2"
+				Height="50"
+				Width="475"
+				VerticalAlignment="Top">
+				<Panel VerticalAlignment="Center">
+					<TextBox Width="315"
+							 Height="20"
+							 Watermark="Search..."
+							 Margin="5 0"
+							 Name="SearchBar" HorizontalAlignment="Left"/>
+
+					<!-- work around for the symbol '<' -->
+				    <Button Content="&#x003C;" Margin="110 0" HorizontalAlignment="Right"
+							Name="Prev"
+							Click="OnPageClick"/>
+					
+					<TextBox Width="5"
+							 Height="20"
+							 Watermark="Page"
+							 Margin="39 0"
+							 Name="SearchIndex" HorizontalAlignment="Right"/>
+					
+					<Button Content=">" Margin="5 0" HorizontalAlignment="Right" 
+							Name="Next"
+							Click="OnPageClick"/>
+				</Panel>
+			</Border>
+		</Panel>
+
+		<TextBlock HorizontalAlignment="Center"
+			VerticalAlignment="Center"
+			Foreground="Black"
+			FontSize="24"
+			IsVisible="{Binding !ModsFetched}">Fetching mods, please be patient!</TextBlock>
+
+		<Grid Margin="10 20" Height="325" VerticalAlignment="Bottom">
+			<ScrollViewer>
+				<ItemsRepeater ItemsSource="{Binding ModsForPage}">
+					<ItemsRepeater.Layout>
+						<UniformGridLayout Orientation="Horizontal"/>
+					</ItemsRepeater.Layout>
+
+					<ItemsRepeater.ItemTemplate>
+						<DataTemplate>
+							<Border Background="#1F1F1F"
+								BorderBrush="#1F1F1F"
+								BorderThickness="5"
+								CornerRadius="5"
+								Width="235"
+								Height="150"
+								Margin="2"
+								ClipToBounds="True">
+								<Panel>
+									<Image
+										Height="135"
+										Width="220"
+										Stretch="UniformToFill"
+										asyncImageLoader:ImageLoader.Source="{Binding ThumbnailImageUrl}"/>
+
+									<Panel
+										Width="235"
+										Height="25"
+										Background="#1f1f1f"
+										Opacity="100"
+										VerticalAlignment="Top"/>
+
+									<Panel
+										Width="235"
+										Height="40"
+										Background="#1f1f1f"
+										Opacity="100"
+										VerticalAlignment="Bottom"/>
+
+									<TextBlock Margin="5" TextAlignment="Center">
+										<Run Text="{Binding ModName}"/>
+										<Run Foreground="Gray" Text="by"/>
+										<Run Foreground="Gray" Text="{Binding ModAuthor}"/>
+									</TextBlock>
+
+									<TextBlock
+										HorizontalAlignment="Left"
+										VerticalAlignment="Bottom"
+										Margin="5"
+										FontSize="12">
+										<Run Text="Likes:"/>
+										<Run Text="{Binding LikesCount}"/>
+										<Run Text="&#x0a;Downloads:"/>
+										<Run Text="{Binding DownloadsCount}"/>
+									</TextBlock>
+
+									<Button Content="Install"
+											Name="{Binding DownloadUrl}"
+											Click="OnInstallButtonClick"
+											Margin="5"
+											VerticalAlignment="Bottom"
+											HorizontalAlignment="Right"
+											Background="Green"/>
+								</Panel>
+							</Border>
+						</DataTemplate>
+					</ItemsRepeater.ItemTemplate>
+				</ItemsRepeater>
+			</ScrollViewer>
+		</Grid>
+	</Panel>
 </UserControl>

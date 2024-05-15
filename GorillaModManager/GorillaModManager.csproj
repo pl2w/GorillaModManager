@@ -5,8 +5,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationManifest>manager.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,9 +15,11 @@
 
   <ItemGroup>
     <None Remove="Assets\icon.ico" />
+    <None Remove="Assets\mountains.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.2.1" />
     <PackageReference Include="Avalonia" Version="11.0.10" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.10" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
@@ -26,6 +28,33 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10" />
+    <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />
     <PackageReference Include="Mono.Cecil" Version="0.11.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="GameBananaAPI">
+      <HintPath>..\..\GameBananaAPI\GameBananaAPI\bin\Release\GameBananaAPI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Models\Persistence\ManagerSettings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ManagerSettings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ModBrowser.axaml.cs">
+      <DependentUpon>ModBrowser.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Models\Persistence\ManagerSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>ManagerSettings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>

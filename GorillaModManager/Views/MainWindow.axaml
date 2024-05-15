@@ -17,17 +17,18 @@
         Background="Transparent">
 
 	<Panel>
-		<ExperimentalAcrylicBorder IsHitTestVisible="False">
-			<ExperimentalAcrylicBorder.Material>
-				<ExperimentalAcrylicMaterial
-					BackgroundSource="Digger"
-					TintColor="Black"
-					TintOpacity="1"
-					MaterialOpacity="0.65" />
-			</ExperimentalAcrylicBorder.Material>
-		</ExperimentalAcrylicBorder>
-
-		<Panel Width="200" Background="#1F1F1F" HorizontalAlignment="Left">
+		<Image IsHitTestVisible="False"
+			Width="10000"
+			Margin="450 0"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Center"
+			Source="avares://GorillaModManager/Assets/mountains.png"/>
+		
+		<Panel 
+			Width="200" 
+			Background="#1f1f1f" 
+			HorizontalAlignment="Left" 
+			IsHitTestVisible="False">
 			<TextBlock 
 				Text="Gorilla Mod Manager" 
 				HorizontalAlignment="Center"
@@ -73,12 +74,14 @@
 				<TabItem Header="Installed Mods">
 					<views:ModManager DataContext="{Binding ModManager}"/>
 				</TabItem>
+				<!-- 
 				<TabItem Header="Config Editor">
 					<views:ModConfig/>
 				</TabItem>
 				<TabItem Header="Custom Items">
 					<views:CustomItems/>
 				</TabItem>
+				-->
 				<TabItem Header="Miscellaneous">
 					<views:Settings/>
 				</TabItem>

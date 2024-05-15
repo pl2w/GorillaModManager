@@ -1,14 +1,14 @@
-﻿using Avalonia.Controls;
-using Avalonia.Interactivity;
-using GorillaModManager.Models;
-using GorillaModManager.Views;
+﻿using GorillaModManager.Models;
+using Microsoft.Win32;
+using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace GorillaModManager.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public string ManagerVersion { get; } = GlobalSettings.Version;
+        public string ManagerVersion { get; } = "v1.0.0";
 
         public static ModManagerViewModel ModManager { get; set; }
 

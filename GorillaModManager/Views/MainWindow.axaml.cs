@@ -1,6 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using GorillaModManager.Models;
+using GorillaModManager.Models.Persistence;
+using System;
+using System.Diagnostics;
 
 namespace GorillaModManager.Views
 {
