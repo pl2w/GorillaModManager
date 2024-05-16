@@ -4,6 +4,7 @@ using GorillaModManager.Utils;
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -13,8 +14,10 @@ namespace GorillaModManager.Services
     {
         public static async Task InstallFromGameBanana(BrowserMod modToInstall)
         {
+            HttpClient client = HttpUtils.MakeGMClient();
+
             string fullPath = Path.Combine(ManagerSettings.Default.GamePath, "BepInEx", "plugins", modToInstall.ModName);
-            byte[] data = await HttpUtils.MakeGMClient().GetByteArrayAsync(modToInstall.DownloadUrl);
+            byte[] data = await client.GetByteArrayAsync(modToInstall.DownloadUrl);
             string hash = GetMD5(data);
 
             // TODO: add warning
@@ -25,13 +28,19 @@ namespace GorillaModManager.Services
                 Directory.CreateDirectory(fullPath);
 
             ZipFile.ExtractToDirectory(new MemoryStream(data), fullPath, true);
+
+            client.Dispose();
         }
 
         public static async Task InstallFromUrl(string url, string localPath)
         {
+            HttpClient client = HttpUtils.MakeGMClient();
+
             string fullPath = Path.Combine(ManagerSettings.Default.GamePath, localPath);
-            byte[] data = await HttpUtils.MakeGMClient().GetByteArrayAsync(url);
+            byte[] data = await client.GetByteArrayAsync(url);
             ZipFile.ExtractToDirectory(new MemoryStream(data), fullPath, true);
+
+            client.Dispose();
         }
 
         // https://stackoverflow.com/questions/42543679/get-md5-checksum-of-byte-arrays-conent-in-c-sharp
