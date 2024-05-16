@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace GorillaModManager.Models.Mods
 {
-    public class BrowserMod(string modName, string modShortDescription, string modAuthor, string downloadUrl, string thumbnailImageUrl, int downloadsCount, int likesCount, JArray deps)
+    public class BrowserMod(string modName, string modShortDescription, string modAuthor, string downloadUrl, string thumbnailImageUrl, int downloadsCount, int likesCount, JArray deps, string hash)
     {
         public string ModName { get; set; } = modName;
         public string ModShortDescription { get; set; } = modShortDescription;
@@ -19,6 +19,7 @@ namespace GorillaModManager.Models.Mods
         public int DownloadsCount { get; set; } = downloadsCount;
         public int LikesCount { get; set; } = likesCount;
         public Dictionary<string, string> Dependencies { get; set; } = ParseJsonArray(deps);
+        public string ValidHash { get; set; } = hash;
 
         public static Dictionary<string, string> ParseJsonArray(JArray deps)
         {

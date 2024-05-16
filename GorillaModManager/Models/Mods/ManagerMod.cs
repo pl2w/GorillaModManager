@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GorillaModManager.ViewModels;
+using System;
 using System.IO;
 
 namespace GorillaModManager.Models.Mods
@@ -37,6 +38,18 @@ namespace GorillaModManager.Models.Mods
             {
 
             }
+        }
+    
+        public void Uninstall()
+        {
+            File.Delete(ModPath + ".dll");
+            File.Delete(ModPath + ".disabled");
+
+            string fileParent = Directory.GetParent(ModPath + ".dll").FullName;
+            if (fileParent != "plugins")
+                Directory.Delete(fileParent, true);
+
+            MainWindowViewModel.ModManager.RefreshModList(MainWindowViewModel.ModManager.SearchText);
         }
     }
 }

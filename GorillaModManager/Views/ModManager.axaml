@@ -62,6 +62,11 @@
 									<Run Foreground="Gray" Text=" | "/>
 									<Run Foreground="Gray" Text="{Binding ModVersion}"/>
 								</TextBlock>
+
+								<Button Content="Uninstall"
+										Margin="40 0" 
+										HorizontalAlignment="Right"
+										Command="{Binding Uninstall}"/>
 								
 								<CheckBox 
 										  IsChecked="{Binding Enabled}" 

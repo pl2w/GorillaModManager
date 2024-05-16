@@ -64,7 +64,8 @@ namespace GorillaModManager.Services
                         API.GetCompleteImageURL(profile._aPreviewMedia._aImages[0]._sFile),
                         profile._nDownloadCount,
                         profile._nLikeCount,
-                        profile._aRequirements
+                        profile._aRequirements,
+                        profile._aFiles[0]._sMd5Checksum
                     )
                 );
             }

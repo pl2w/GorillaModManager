@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using GorillaModManager.Models.Mods;
-using System;
 
 namespace GorillaModManager.ViewModels
 {
