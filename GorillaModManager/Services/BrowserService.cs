@@ -2,24 +2,26 @@
 using GameBananaAPI.Data;
 using GorillaModManager.Models;
 using GorillaModManager.Models.Mods;
+using GorillaModManager.Utils;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GorillaModManager.Services
 {
     public class BrowserService
     {
-        public BlockList blockList;
+        public BlockList blockList = new();
         public const string BlockListUrl = "https://raw.githubusercontent.com/pl2w/GorillaModManager/master/blocklist-ids.json";
 
         public BrowserService()
         {
-            WebClient wb = new WebClient();
+            WebClient wb = new();
             blockList = JsonConvert.DeserializeObject<BlockList>(wb.DownloadString(BlockListUrl));
         }
 
@@ -49,7 +51,7 @@ namespace GorillaModManager.Services
                 if (blockList.blockedPages.Contains(item._idRow))
                     continue;
 
-                DateTime dt = UnixTimeStampToDateTime(profile._tsDateAdded);
+                DateTime dt = DateUtils.UnixTimeStampToDateTime(profile._tsDateAdded);
                 if (DateTime.Now < dt.AddDays(3))
                     continue;
 
@@ -61,28 +63,13 @@ namespace GorillaModManager.Services
                         API.GetDownloadURL(profile._aFiles[0]._idRow),
                         API.GetCompleteImageURL(profile._aPreviewMedia._aImages[0]._sFile),
                         profile._nDownloadCount,
-                        profile._nLikeCount
+                        profile._nLikeCount,
+                        profile._aRequirements
                     )
                 );
             }
 
             return modsToReturn;
         }
-
-        DateTime UnixTimeStampToDateTime(double unixTimeStamp)
-        {
-            DateTime dateTime = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-            return dateTime;
-        }
-
-        //item._sName, 
-        //item._aSubmitter._sName,
-        //profile._sDescription,
-        //API.GetDownloadURL(profile._aFiles[0]._idRow),
-        //profile._nDownloadCount,
-        //item._idRow,
-        //API.GetCompleteImageURL(profile._aPreviewMedia._aImages[0]._sFile),
-        //profile._nLikeCount
     }
 }

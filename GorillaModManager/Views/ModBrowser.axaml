@@ -107,7 +107,7 @@
 
 									<Button Content="Install"
 											Name="{Binding DownloadUrl}"
-											Click="OnInstallButtonClick"
+											Command="{Binding InstallMod}"
 											Margin="5"
 											VerticalAlignment="Bottom"
 											HorizontalAlignment="Right"

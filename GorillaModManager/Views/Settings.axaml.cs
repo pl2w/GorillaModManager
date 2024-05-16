@@ -31,7 +31,8 @@ namespace GorillaModManager.Views
 
         private void HandlePathButtons()
         {
-            if(File.Exists(Path.Combine(ManagerSettings.Default.GamePath, "Gorilla Tag.exe")))
+            UninstallButton.IsEnabled = false;
+            if (File.Exists(Path.Combine(ManagerSettings.Default.GamePath, "Gorilla Tag.exe")))
             {
                 InstallButton.IsEnabled = true;
                 LaunchGame.IsEnabled = true;
@@ -53,13 +54,13 @@ namespace GorillaModManager.Views
             }
             else
             {
-                UninstallButton.IsEnabled = false;
                 ToggleButton.IsEnabled = false;
             }
 
             if(Directory.Exists(Path.Combine(ManagerSettings.Default.GamePath, "BepInEx")))
             {
                 BackupMods.IsEnabled = true;
+                UninstallButton.IsEnabled = true;
             }
             else
             {
@@ -89,7 +90,6 @@ namespace GorillaModManager.Views
                 return;
 
             GorilaPath.Text = DataUtils.SetGamePath(Path.GetDirectoryName(files[0].Path.LocalPath));
-
             HandlePathButtons();
         }
 
@@ -100,8 +100,9 @@ namespace GorillaModManager.Views
             switch (objectName)
             {
                 case "InstallButton":
-                    await InstallationHandler.InstallFileFromUrl(
-                        new InstallerMod("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.1/BepInEx_win_x64_5.4.23.1.zip", "BepInEx"), string.Empty, false);
+                    await ItemInstaller.InstallFromUrl(
+                        "https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.1/BepInEx_win_x64_5.4.23.1.zip",
+                        string.Empty);
 
                     HandlePathButtons();
                     break;
@@ -119,15 +120,37 @@ namespace GorillaModManager.Views
                     }
                     break;
                 case "UninstallButton":
-                    File.Delete(Path.Combine(ManagerSettings.Default.GamePath, "winhttp.dll"));
-                    File.Delete(Path.Combine(ManagerSettings.Default.GamePath, ".doorstop_version"));
-                    File.Delete(Path.Combine(ManagerSettings.Default.GamePath, "changelog.txt"));
-                    File.Delete(Path.Combine(ManagerSettings.Default.GamePath, "doorstop_config.ini"));
+                    var box = MessageBoxManager
+                    .GetMessageBoxStandard("Uninstaller", "Are you sure you want to uninstall BepInEx and all associated files including your installed mods?",
+                        ButtonEnum.YesNo);
 
-                    if (DataUtils.IsBepInExInstalled())
-                        Directory.Delete(Path.Combine(ManagerSettings.Default.GamePath, "BepInEx"), true);
+                    ButtonResult result = await box.ShowAsync();
 
-                    HandlePathButtons();
+                    if(result == ButtonResult.Yes)
+                    {
+                        try
+                        {
+                            File.Delete(Path.Combine(ManagerSettings.Default.GamePath, "winhttp.dll"));
+                            File.Delete(Path.Combine(ManagerSettings.Default.GamePath, ".doorstop_version"));
+                            File.Delete(Path.Combine(ManagerSettings.Default.GamePath, "changelog.txt"));
+                            File.Delete(Path.Combine(ManagerSettings.Default.GamePath, "doorstop_config.ini"));
+
+                            if (DataUtils.IsBepInExInstalled())
+                                Directory.Delete(Path.Combine(ManagerSettings.Default.GamePath, "BepInEx"), true);
+
+                            await MessageBoxManager
+                                .GetMessageBoxStandard("Uninstaller", "Uninstalled BepInEx succesfully.",
+                                    ButtonEnum.Ok).ShowAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            await MessageBoxManager
+                                .GetMessageBoxStandard("Uninstaller", e.Message,
+                                    ButtonEnum.Ok).ShowAsync();
+                        }
+
+                        HandlePathButtons();
+                    }
                     break;
                 case "BackupMods":
                     await HandleBackupMods();

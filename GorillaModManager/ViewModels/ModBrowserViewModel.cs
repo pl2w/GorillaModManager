@@ -90,7 +90,7 @@ namespace GorillaModManager.ViewModels
                 return;
             }
 
-            await InstallationHandler.InstallFileFromUrl(mod, "BepInEx/plugins", true);
+            //await InstallationHandler.InstallFileFromUrl(mod, "BepInEx/plugins", true);
         }
 
         private BrowserMod FindModForUrl(string modUrl)

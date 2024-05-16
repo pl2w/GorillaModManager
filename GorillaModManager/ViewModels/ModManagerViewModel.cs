@@ -74,6 +74,7 @@ namespace GorillaModManager.ViewModels
                 string modVersion = "v???";
                 string modGuid = "Unknown";
                 string modName = modSimpleName;
+                List<string> modDependencies = new List<string>();
 
                 if (!_cachedModInfos.TryGetValue($"{modPath}/{modSimpleName}", out ModInfo cachedInfo))
                 {
@@ -108,6 +109,12 @@ namespace GorillaModManager.ViewModels
                                 modName = (string)values[1].Value;
                                 modVersion = $"v{(string)values[2].Value}";
                             }
+
+                            //if (pluginType.CustomAttributes[z].Constructor.FullName.Contains("BepInEx.BepInDependency"))
+                            //{
+                            //    var values = pluginType.CustomAttributes[z].ConstructorArguments;
+                            //    modDependencies.Add((string)values[0].Value);
+                            //}
                         }
                     }
                 }
@@ -117,6 +124,7 @@ namespace GorillaModManager.ViewModels
                     modVersion = cachedInfo.modVersion;
                     modName = cachedInfo.modName;
                     modGuid = cachedInfo.modGuid;
+                    modDependencies = cachedInfo.modDependencies;
                 }
 
                 ManagerMod model = new
@@ -132,7 +140,7 @@ namespace GorillaModManager.ViewModels
 
                 if (!_cachedModInfos.ContainsKey($"{modPath}/{modSimpleName}"))
                 {
-                    ModInfo info = new(modGuid, modName, modVersion);
+                    ModInfo info = new(modGuid, modName, modVersion, modDependencies);
                     _cachedModInfos.Add($"{modPath}/{modSimpleName}", info);
                 }
             }
