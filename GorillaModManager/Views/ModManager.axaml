@@ -4,80 +4,100 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="GorillaModManager.Views.ModManager"
-			 xmlns:vm="using:GorillaModManager.ViewModels"
-			 x:DataType="vm:ModManagerViewModel"
-			 Width="500"
-			 Height="400">
+             xmlns:vm="using:GorillaModManager.ViewModels"
+             x:DataType="vm:ModManagerViewModel"
+             Width="500"
+             Height="400">
 
-	<Panel>
-		<Panel>			
-			<Border Background="#2E2E2E"
-				BorderBrush="#1F1F1F"
-				BorderThickness="5"
-				CornerRadius="5"
-				Margin="0 2"
-				Height="50"
-				Width="475"
-				VerticalAlignment="Top">
-				<WrapPanel VerticalAlignment="Center">
-					<Button Command="{Binding RefreshModList}"
-						HorizontalAlignment="Left"
-						VerticalAlignment="Top"
-						Content="Refresh"
-						Margin="5 5"/>
-					<Button Command="{Binding ToggleMods}"
-						HorizontalAlignment="Left"
-						VerticalAlignment="Top"
-						Content="Toggle All"
-						Margin="0 5"/>
-					<TextBox Width="290" 
-							 Height="20"
-							 Watermark="Search..."
-							 Margin="5 0"
-							 Name="SearchBar"
-							 Text="{Binding SearchText}"/>
-				</WrapPanel>
-			</Border>
-		</Panel>
-		
-		<ScrollViewer VerticalScrollBarVisibility="Visible"
-			Width="475"
-			Height="320"
-			VerticalAlignment="Bottom"
-			HorizontalAlignment="Center"
-			Margin="0 25">
-			<ItemsControl ItemsSource="{Binding InstalledMods}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Border Background="#2E2E2E"
-							BorderBrush="#1F1F1F"
-							BorderThickness="5"
-							CornerRadius="5"
-							Margin="0 2">
-							<Panel Height="30" Margin="10">
-								<TextBlock VerticalAlignment="Top" Text="{Binding ModName}" Margin="5 -2.5"/>
-								
-								<TextBlock VerticalAlignment="Bottom" Margin="5 -2.5">
-									<Run Foreground="Gray" Text="{Binding ModGuid}"/>
-									<Run Foreground="Gray" Text=" | "/>
-									<Run Foreground="Gray" Text="{Binding ModVersion}"/>
-								</TextBlock>
+    <Panel>
+        <Panel>
+            <Border Background="#2E2E2E"
+                    BorderBrush="#1F1F1F"
+                    BorderThickness="5"
+                    CornerRadius="5"
+                    Margin="0 2"
+                    Height="50"
+                    Width="475"
+                    VerticalAlignment="Top">
+                <WrapPanel VerticalAlignment="Center">
+                    <Button Command="{Binding RefreshModList}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="Refresh"
+                            Margin="5 5"/>
+                    <Button Command="{Binding ToggleMods}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="Toggle All"
+                            Margin="0 5"/>
+                    <TextBox Width="290"
+                             Height="20"
+                             Watermark="Search..."
+                             Margin="5 0"
+                             Name="SearchBar"
+                             Text="{Binding SearchText}"/>
+                </WrapPanel>
+            </Border>
+        </Panel>
 
-								<Button Content="Uninstall"
-										Margin="40 0" 
-										HorizontalAlignment="Right"
-										Command="{Binding Uninstall}"/>
-								
-								<CheckBox 
-										  IsChecked="{Binding Enabled}" 
-										  Margin="0 0" 
-										  HorizontalAlignment="Right"
-										  Command="{Binding Toggle}"/>
-							</Panel>
-						</Border>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-		</ScrollViewer>
-	</Panel>
+        <ScrollViewer VerticalScrollBarVisibility="Visible"
+                      Width="475"
+                      Height="320"
+                      VerticalAlignment="Bottom"
+                      HorizontalAlignment="Center"
+                      Margin="0 25">
+            <ItemsControl ItemsSource="{Binding InstalledMods}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#2E2E2E"
+                                BorderBrush="#1F1F1F"
+                                BorderThickness="5"
+                                CornerRadius="5"
+                                Margin="0 2">
+                            <Panel Height="30" Margin="10">
+
+                                <!-- Controls -->
+                                <Panel HorizontalAlignment="Right">
+                                    <Button Content="Uninstall"
+                                            Margin="40 0" HorizontalAlignment="Right"
+                                            Command="{Binding Uninstall}"/>
+                                    <CheckBox
+                                        IsChecked="{Binding Enabled}"
+                                        Margin="0 0" HorizontalAlignment="Right"
+                                        Command="{Binding Toggle}"/>
+                                </Panel>
+
+                                <!-- If gamebanana info exists show this panel -->
+                                <Panel IsVisible="{Binding GameBananaInfoExists}">
+                                    <Image Source="{Binding ModIcon}"
+                                           HorizontalAlignment="Left"/>
+                                    <TextBlock Margin="60 -2.5">
+                                        <Run Text="{Binding ModName}"/>
+                                        <Run> | </Run>
+                                        <Run Text="{Binding ModVersion}"/>
+                                        <Run Foreground="Gray"> by </Run>
+                                        <Run Foreground="Gray" Text="{Binding ModAuthor}"/>
+                                    </TextBlock>
+                                    <TextBlock VerticalAlignment="Bottom" Margin="60 -2.5"
+                                               Foreground="Gray"
+                                               Text="{Binding ModDescription}"/>
+                                </Panel>
+
+                                <!-- If gamebanana info doesn't exist show this panel -->
+                                <Panel IsVisible="{Binding !GameBananaInfoExists}">
+                                    <TextBlock VerticalAlignment="Top" Text="{Binding ModName}" Margin="5 -2.5"/>
+
+                                    <TextBlock VerticalAlignment="Bottom" Margin="5 -2.5">
+                                        <Run Foreground="Gray" Text="{Binding ModGuid}"/>
+                                        <Run Foreground="Gray" Text=" | "/>
+                                        <Run Foreground="Gray" Text="{Binding ModVersion}"/>
+                                    </TextBlock>
+                                </Panel>
+                            </Panel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Panel>
 </UserControl>

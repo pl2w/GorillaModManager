@@ -1,7 +1,8 @@
-﻿using GorillaModManager.Models;
+﻿using Avalonia.Media.Imaging;
 using GorillaModManager.Models.Mods;
 using GorillaModManager.Models.Persistence;
 using Mono.Cecil;
+using Newtonsoft.Json;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -52,14 +53,16 @@ namespace GorillaModManager.ViewModels
 
             List<string> mods = [.. Directory.GetFiles(DataUtils.Plugins(), "*.dll", SearchOption.AllDirectories)];
             mods.AddRange(Directory.GetFiles(DataUtils.Plugins(), "*.disabled", SearchOption.AllDirectories));
-            
+
             InstalledMods = GetValidMods(mods, search);
         }
 
         private List<ManagerMod> GetValidMods(List<string> modFiles, string searchTerm)
         {
+#if DEBUG
             Stopwatch watch = new();
             watch.Start();
+#endif
 
             List<ManagerMod> ManagerMods = [];
             for (int i = 0; i < modFiles.Count; i++)
@@ -75,10 +78,16 @@ namespace GorillaModManager.ViewModels
                 string modGuid = "Unknown";
                 string modName = modSimpleName;
                 List<string> modDependencies = new List<string>();
+                GameBananaInfo gameBananaInfo = null;
 
                 if (!_cachedModInfos.TryGetValue($"{modPath}/{modSimpleName}", out ModInfo cachedInfo))
                 {
-                    List<TypeDefinition> types = AssemblyDefinition
+                    // load game banana info
+                    string gameBananaInfoPath = Path.Combine(modPath, "gamebanana.json");
+                    if (File.Exists(gameBananaInfoPath)) 
+                        gameBananaInfo = JsonConvert.DeserializeObject<GameBananaInfo>(File.ReadAllText(gameBananaInfoPath)) ?? throw new Exception("Failed to parse game banana info. Please delete the cache file at " + gameBananaInfoPath);
+
+                    var types = AssemblyDefinition
                         .ReadAssembly(modFiles[i], new ReaderParameters { ReadWrite = true })
                         .MainModule
                         .Types
@@ -119,12 +128,13 @@ namespace GorillaModManager.ViewModels
                     }
                 }
 
-                if(cachedInfo != null)
+                if (cachedInfo != null)
                 {
                     modVersion = cachedInfo.modVersion;
                     modName = cachedInfo.modName;
                     modGuid = cachedInfo.modGuid;
                     modDependencies = cachedInfo.modDependencies;
+                    gameBananaInfo = cachedInfo.gameBananaInfo;
                 }
 
                 ManagerMod model = new
@@ -134,21 +144,39 @@ namespace GorillaModManager.ViewModels
                     modVersion,
                     enabled,
                     $"{modPath}/{modSimpleName}"
-                );
+                )
+                {
+                    ModIcon = gameBananaInfo?.icon != null ? ByteArrayToBitmap(gameBananaInfo.icon) : null,
+                    ModAuthor = gameBananaInfo?.author ?? "Unknown",
+                    ModDescription = gameBananaInfo?.description ?? "No description provided."
+                };
 
                 ManagerMods.Add(model);
 
                 if (!_cachedModInfos.ContainsKey($"{modPath}/{modSimpleName}"))
                 {
-                    ModInfo info = new(modGuid, modName, modVersion, modDependencies);
+                    string gameBananaInfoPath = Path.Combine(modPath, "gamebanana.json");
+                    gameBananaInfo = File.Exists(gameBananaInfoPath) ? JsonConvert.DeserializeObject<GameBananaInfo>(File.ReadAllText(gameBananaInfoPath)) : null;
+                    ModInfo info = gameBananaInfo != null ?
+                        new ModInfo(modGuid, modName, modVersion, modDependencies, gameBananaInfo) :
+                        new ModInfo(modGuid, modName, modVersion, modDependencies);
                     _cachedModInfos.Add($"{modPath}/{modSimpleName}", info);
+                    // Debug.WriteLine($"Did get gamebanana info for {info.modName} {info.gameBananaInfo != null}");
                 }
             }
 
+#if DEBUG
             watch.Stop();
             Debug.WriteLine($"Took: {watch.Elapsed}");
+#endif
 
             return ManagerMods;
+        }
+
+        public static Bitmap ByteArrayToBitmap(byte[] byteArray)
+        {
+            using var stream = new MemoryStream(byteArray);
+            return new Bitmap(stream);
         }
 
         public void ToggleMods()

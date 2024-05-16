@@ -1,9 +1,11 @@
 ﻿using GorillaModManager.Models.Mods;
 using GorillaModManager.Models.Persistence;
 using GorillaModManager.Utils;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -13,6 +15,8 @@ namespace GorillaModManager.Services
     {
         public static async Task InstallFromGameBanana(BrowserMod modToInstall)
         {
+            using var client = new HttpClient();
+
             string fullPath = Path.Combine(ManagerSettings.Default.GamePath, "BepInEx", "plugins", modToInstall.ModName);
             byte[] data = await HttpUtils.MakeGMClient().GetByteArrayAsync(modToInstall.DownloadUrl);
             string hash = GetMD5(data);
@@ -25,6 +29,13 @@ namespace GorillaModManager.Services
                 Directory.CreateDirectory(fullPath);
 
             ZipFile.ExtractToDirectory(new MemoryStream(data), fullPath, true);
+            
+            // setup gamebanana cached info
+            // probably not the best idea to store the icon in the json but whatever
+            var icon = await client.GetByteArrayAsync(modToInstall.ThumbnailImageUrl);
+            await File.WriteAllTextAsync(Path.Combine(fullPath, "gamebanana.json"), JsonConvert.SerializeObject(
+                new GameBananaInfo(icon, modToInstall.ModAuthor, modToInstall.ModShortDescription)
+                ));
         }
 
         public static async Task InstallFromUrl(string url, string localPath)

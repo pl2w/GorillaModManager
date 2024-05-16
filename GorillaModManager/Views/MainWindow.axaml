@@ -6,94 +6,94 @@
         mc:Ignorable="d"
         x:Class="GorillaModManager.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-		xmlns:views="using:GorillaModManager.Views"
+        xmlns:views="using:GorillaModManager.Views"
         Icon="/Assets/icon.ico"
         Title="GorillaModManager"
-		Width="700"
-		Height="450"
-		ExtendClientAreaToDecorationsHint="True"
-		CanResize="False"
-		TransparencyLevelHint="AcrylicBlur"
+        Width="700"
+        Height="450"
+        ExtendClientAreaToDecorationsHint="True"
+        CanResize="False"
+        TransparencyLevelHint="AcrylicBlur"
         Background="Transparent">
 
-	<Panel>
-		<Image IsHitTestVisible="False"
-			Width="10000"
-			Margin="450 0"
-			HorizontalAlignment="Center"
-			VerticalAlignment="Center"
-			Source="avares://GorillaModManager/Assets/mountains.png"/>
-		
-		<Panel 
-			Width="200" 
-			Background="#1f1f1f" 
-			HorizontalAlignment="Left" 
-			IsHitTestVisible="False">
-			<TextBlock 
-				Text="Gorilla Mod Manager" 
-				HorizontalAlignment="Center"
-				Margin="0 15"
-				FontSize="16"
-				FontWeight="Bold"/>
-			<TextBlock
-				HorizontalAlignment="Center"
-				Margin="0 40"
-				FontSize="10"
-				Foreground="Gray"
-				Text="by pl2w | discord.gg/monkemod">
-			</TextBlock>
+    <Panel>
+        <Image IsHitTestVisible="False"
+               Width="10000"
+               Margin="450 0"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Source="avares://GorillaModManager/Assets/mountains.png"/>
 
-			<Panel Width="200" Height="2"
-				Background="#2e2e2e" VerticalAlignment="Top"
-				Margin="60"/>
+        <Panel
+            Width="200"
+            Background="#1f1f1f"
+            HorizontalAlignment="Left"
+            IsHitTestVisible="False">
+            <TextBlock
+                Text="Gorilla Mod Manager"
+                HorizontalAlignment="Center"
+                Margin="0 15"
+                FontSize="16"
+                FontWeight="Bold"/>
+            <TextBlock
+                HorizontalAlignment="Center"
+                Margin="0 40"
+                FontSize="10"
+                Foreground="Gray"
+                Text="by pl2w | discord.gg/monkemod">
+            </TextBlock>
 
-			<Button HorizontalAlignment="Right" VerticalAlignment="Top"
-				Background="Transparent"
-				Margin="22 40"
-				Width="110"
-				Command="{Binding OnDiscordClick}">
-				<Button.Styles>
-					<Style Selector="Button">
-						<Setter Property="Background" Value="Transparent" />
-					</Style>
-					<Style Selector="Button:pointerover /template/ ContentPresenter">
-						<Setter Property="Background" Value="Transparent" />
-					</Style>
-					<Style Selector="Button:pressed /template/ ContentPresenter">
-						<Setter Property="Background" Value="Transparent" />
-					</Style>
-				</Button.Styles>
-			</Button>
-		</Panel>
+            <Panel Width="200" Height="2"
+                   Background="#2e2e2e" VerticalAlignment="Top"
+                   Margin="60"/>
 
-		<WrapPanel Margin="0 290" Height="450">
-			<TabControl TabStripPlacement="Left">
-				<TabItem Header="Mod Browser">
-					<views:ModBrowser/>
-				</TabItem>
-				<TabItem Header="Installed Mods">
-					<views:ModManager DataContext="{Binding ModManager}"/>
-				</TabItem>
-				<!-- 
-				<TabItem Header="Config Editor">
-					<views:ModConfig/>
-				</TabItem>
-				<TabItem Header="Custom Items">
-					<views:CustomItems/>
-				</TabItem>
-				-->
-				<TabItem Header="Miscellaneous">
-					<views:Settings/>
-				</TabItem>
-			</TabControl>
-		</WrapPanel>
-		
-		<TextBlock
-			VerticalAlignment="Bottom" 
-			Margin="5" 
-			Foreground="#444444" 
-			FontWeight="Bold"
-			FontSize="10"
-			Text="{Binding ManagerVersion}"/>
-	</Panel>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Background="Transparent"
+                    Margin="22 40"
+                    Width="110"
+                    Command="{Binding OnDiscordClick}">
+                <Button.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    <Style Selector="Button:pointerover /template/ ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    <Style Selector="Button:pressed /template/ ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                </Button.Styles>
+            </Button>
+        </Panel>
+
+        <WrapPanel Margin="0 290" Height="450">
+            <TabControl TabStripPlacement="Left">
+                <TabItem Header="Mod Browser">
+                    <views:ModBrowser/>
+                </TabItem>
+                <TabItem Header="Installed Mods">
+                    <views:ModManager DataContext="{Binding ModManager}"/>
+                </TabItem>
+                <!--
+                <TabItem Header="Config Editor">
+                <views:ModConfig/>
+                </TabItem>
+                <TabItem Header="Custom Items">
+                <views:CustomItems/>
+                </TabItem>
+                -->
+                <TabItem Header="Miscellaneous">
+                    <views:Settings/>
+                </TabItem>
+            </TabControl>
+        </WrapPanel>
+
+        <TextBlock
+            VerticalAlignment="Bottom"
+            Margin="5"
+            Foreground="#444444"
+            FontWeight="Bold"
+            FontSize="10"
+            Text="{Binding ManagerVersion}"/>
+    </Panel>
 </Window>
