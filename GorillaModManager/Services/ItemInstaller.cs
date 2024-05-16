@@ -18,7 +18,7 @@ namespace GorillaModManager.Services
             using var client = new HttpClient();
 
             string fullPath = Path.Combine(ManagerSettings.Default.GamePath, "BepInEx", "plugins", modToInstall.ModName);
-            byte[] data = await HttpUtils.MakeGMClient().GetByteArrayAsync(modToInstall.DownloadUrl);
+            byte[] data = await client.GetByteArrayAsync(modToInstall.DownloadUrl);
             string hash = GetMD5(data);
 
             // TODO: add warning
@@ -40,8 +40,10 @@ namespace GorillaModManager.Services
 
         public static async Task InstallFromUrl(string url, string localPath)
         {
+            using var client = HttpUtils.MakeGMClient();
+
             string fullPath = Path.Combine(ManagerSettings.Default.GamePath, localPath);
-            byte[] data = await HttpUtils.MakeGMClient().GetByteArrayAsync(url);
+            byte[] data = await client.GetByteArrayAsync(url);
             ZipFile.ExtractToDirectory(new MemoryStream(data), fullPath, true);
         }
 
