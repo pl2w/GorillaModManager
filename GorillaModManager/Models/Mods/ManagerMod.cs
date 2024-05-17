@@ -15,8 +15,8 @@ namespace GorillaModManager.Models.Mods
         public string ModPath { get; set; } = string.Empty;
 
         // game banana info stuff
-        public bool GameBananaInfoExists => ModIcon is object;
-        public Bitmap ModIcon { get; set; } = null;
+        public bool GameBananaInfoExists => ModIconUrl is not null;
+        public string ModIconUrl { get; set; } = null;
         public string ModDescription { get; set; } = string.Empty;
         public string ModAuthor { get; set; } = string.Empty;
 

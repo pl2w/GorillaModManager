@@ -146,7 +146,7 @@ namespace GorillaModManager.ViewModels
                     $"{modPath}/{modSimpleName}"
                 )
                 {
-                    ModIcon = gameBananaInfo?.icon != null ? ByteArrayToBitmap(gameBananaInfo.icon) : null,
+                    ModIconUrl = gameBananaInfo?.iconUrl ?? null,
                     ModAuthor = gameBananaInfo?.author ?? "Unknown",
                     ModDescription = gameBananaInfo?.description ?? "No description provided."
                 };

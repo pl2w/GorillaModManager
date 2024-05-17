@@ -6,6 +6,7 @@
              x:Class="GorillaModManager.Views.ModManager"
              xmlns:vm="using:GorillaModManager.ViewModels"
              x:DataType="vm:ModManagerViewModel"
+			 xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              Width="500"
              Height="400">
 
@@ -69,7 +70,7 @@
 
                                 <!-- If gamebanana info exists show this panel -->
                                 <Panel IsVisible="{Binding GameBananaInfoExists}">
-                                    <Image Source="{Binding ModIcon}"
+                                    <Image asyncImageLoader:ImageLoader.Source="{Binding ModIconUrl}"
                                            HorizontalAlignment="Left"/>
                                     <TextBlock Margin="60 -2.5">
                                         <Run Text="{Binding ModName}"/>

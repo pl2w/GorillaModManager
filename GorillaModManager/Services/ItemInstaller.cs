@@ -31,10 +31,8 @@ namespace GorillaModManager.Services
             ZipFile.ExtractToDirectory(new MemoryStream(data), fullPath, true);
             
             // setup gamebanana cached info
-            // probably not the best idea to store the icon in the json but whatever
-            var icon = await client.GetByteArrayAsync(modToInstall.ThumbnailImageUrl);
             await File.WriteAllTextAsync(Path.Combine(fullPath, "gamebanana.json"), JsonConvert.SerializeObject(
-                new GameBananaInfo(icon, modToInstall.ModAuthor, modToInstall.ModShortDescription)
+                new GameBananaInfo(modToInstall.ThumbnailImageUrl, modToInstall.ModAuthor, modToInstall.ModShortDescription)
                 ));
         }
 
