@@ -1,6 +1,7 @@
 ﻿using GorillaModManager.Models.Mods;
 using GorillaModManager.Models.Persistence;
 using GorillaModManager.Utils;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -14,7 +15,7 @@ namespace GorillaModManager.Services
     {
         public static async Task InstallFromGameBanana(BrowserMod modToInstall)
         {
-            HttpClient client = HttpUtils.MakeGMClient();
+            using var client = new HttpClient();
 
             string fullPath = Path.Combine(ManagerSettings.Default.GamePath, "BepInEx", "plugins", modToInstall.ModName);
             byte[] data = await client.GetByteArrayAsync(modToInstall.DownloadUrl);
@@ -28,19 +29,22 @@ namespace GorillaModManager.Services
                 Directory.CreateDirectory(fullPath);
 
             ZipFile.ExtractToDirectory(new MemoryStream(data), fullPath, true);
-
-            client.Dispose();
+            
+            // setup gamebanana cached info
+            // probably not the best idea to store the icon in the json but whatever
+            var icon = await client.GetByteArrayAsync(modToInstall.ThumbnailImageUrl);
+            await File.WriteAllTextAsync(Path.Combine(fullPath, "gamebanana.json"), JsonConvert.SerializeObject(
+                new GameBananaInfo(icon, modToInstall.ModAuthor, modToInstall.ModShortDescription)
+                ));
         }
 
         public static async Task InstallFromUrl(string url, string localPath)
         {
-            HttpClient client = HttpUtils.MakeGMClient();
+            using var client = HttpUtils.MakeGMClient();
 
             string fullPath = Path.Combine(ManagerSettings.Default.GamePath, localPath);
             byte[] data = await client.GetByteArrayAsync(url);
             ZipFile.ExtractToDirectory(new MemoryStream(data), fullPath, true);
-
-            client.Dispose();
         }
 
         // https://stackoverflow.com/questions/42543679/get-md5-checksum-of-byte-arrays-conent-in-c-sharp
