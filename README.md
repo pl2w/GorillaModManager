@@ -14,3 +14,9 @@
      GameBanana: "https://gamebanana.com/mods/507053"
    
 Failure to comply with those two rules will result in your GameBanana profile/mod being blacklisted from Gorilla Mod Manager.
+
+# Building
+1. Clone GorillaModManager
+2. Compile GameBananaAPI and move the dll next to the '.sln' file.
+![image](https://github.com/pl2w/GorillaModManager/assets/137610832/8c79f2a3-8ac0-492d-a822-9720c0ef09b8)
+3. Run 'build-release.bat' next to the '.csproj' file. (may take a couple of attemps for some reason.)
