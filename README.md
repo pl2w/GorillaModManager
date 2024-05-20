@@ -18,7 +18,7 @@ Failure to comply with those two rules will result in your GameBanana profile/mo
 # Building
 1. Clone GorillaModManager
 ### If GameBananaAPI.dll does not exist next to the .sln file.
-2. Compile GameBananaAPI and move the dll next to the '.sln' file.
+2. Compile [GameBananaAPI](https://github.com/pl2w/Simple-GameBanana-API) and move the dll next to the '.sln' file.
 ![image](https://github.com/pl2w/GorillaModManager/assets/137610832/8c79f2a3-8ac0-492d-a822-9720c0ef09b8)
 
 4. Run 'build-release.bat' next to the '.csproj' file. (may take a couple of attempts for some reason.)
